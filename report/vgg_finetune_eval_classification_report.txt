@@ -1,0 +1,8 @@
+              precision    recall  f1-score   support
+
+      Ksusha       0.89      0.80      0.84        10
+        Tiku       0.92      0.96      0.94        24
+
+    accuracy                           0.91        34
+   macro avg       0.90      0.88      0.89        34
+weighted avg       0.91      0.91      0.91        34

@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.ipynb_checkpoints/
+*.h5
+*.keras
+*.ckpt
+*.weights.h5
+dataset/raw/
+dataset/split/
+dataset/structured/
+.DS_Store
