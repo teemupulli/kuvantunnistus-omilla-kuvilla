@@ -39,10 +39,10 @@ Lisäksi omaa CNN-mallia testattiin augmentaatiolla, koska alkuperäinen CNN kä
 
 | Malli | Menetelmä | Test accuracy | Huomio |
 | --- | --- | ---: | --- |
-| Malli 1 | Oma CNN, baseline | 0.71 | Ennusti usein Tiku-luokkaa eikä tunnistanut Ksushaa luotettavasti. |
-| Malli 1b | Oma CNN + augmentaatio | 0.88 | Paransi yleistymistä ja vähemmistöluokan tunnistusta. |
-| Malli 2 | VGG16 feature extraction | 0.94 | Paras notebook-ajon testitulos; VGG16:n piirteet sopivat hyvin pieneen datasettiin. |
-| Malli 3 | Hienosäädetty VGG16 | 0.91 | Erittäin hyvä ja tasapainoinen tulos, mutta tässä ajossa hieman feature extractionia heikompi. |
+| Malli 1 | Oma CNN, notebook-ajossa | 0.74 | Oppi peruskuvion, mutta tulos jäi transfer learning -mallia heikommaksi. |
+| Malli 1b | Oma CNN + augmentaatio, erillinen ajettu arviointi | 0.88 | Paransi yleistymistä ja vähemmistöluokan tunnistusta. |
+| Malli 2 | VGG16 feature extraction, notebook-ajossa | 0.88 | Paras tai jaettu paras tulos; VGG16:n piirteet sopivat hyvin pieneen datasettiin. |
+| Malli 3 | Hienosäädetty VGG16, notebook-ajossa | 0.71 | Tässä uudelleenajossa ei parantanut tulosta, mikä viittaa ylisovittamisen tai epävakaan hienosäädön riskiin. |
 
 ### Tulosten vertailu
 
@@ -50,7 +50,7 @@ Baseline-CNN oppi peruskuvion, mutta pieni ja epätasapainoinen datasetti teki s
 
 VGG16 feature extraction oli erityisen vahva tässä tehtävässä. Koska datasetti on pieni, esikoulutetun verkon yleiset kuvanpiirteet toimivat hyvin, ja vain oman luokittelijan kouluttaminen vähensi ylisovittamisen riskiä.
 
-Hienosäädetty VGG16 saavutti myös hyvän tuloksen. Se pystyi mukauttamaan viimeisiä VGG16-kerroksia omiin kissakuviin, mutta pienellä datasetillä hienosäätö voi olla herkempi ylisovittamiselle kuin pelkkä feature extraction.
+Hienosäädetty VGG16 oli tässä uudelleenajossa heikompi kuin feature extraction. Se näyttää, että pienellä datasetillä hienosäätö voi olla herkkä satunnaisuudelle, oppimisnopeudelle ja sille, kuinka monta kerrosta vapautetaan.
 
 ### Oppimiskäyrät
 
@@ -72,9 +72,8 @@ Testidatan arviointi paljasti mallien käytännön erot.
 
 ### Baseline CNN
 
-- Accuracy: 0.71
-- Ksusha: precision 0.00, recall 0.00
-- Tiku: precision 0.71, recall 1.00
+- Accuracy: 0.74 notebook-ajossa
+- Aiemmassa erillisessä arvioinnissa accuracy oli 0.71, ja malli painottui vahvasti Tiku-luokkaan.
 
 Baseline-malli käytännössä painottui enemmistöluokkaan, joten sen accuracy näyttää paremmalta kuin todellinen luokkakohtainen suorituskyky.
 
@@ -88,7 +87,7 @@ Augmentaatio paransi erityisesti Ksusha-luokan tunnistusta ja vähensi mallin ri
 
 ### VGG16 Feature Extraction
 
-- Accuracy: 0.94 notebook-ajossa
+- Accuracy: 0.88 notebook-ajossa
 - Mallissa VGG16:n konvoluutiokerrokset pidettiin jäädytettyinä.
 - Vain oma luokittelija koulutettiin omalle datasetille.
 
@@ -96,11 +95,10 @@ Tämä malli sopii hyvin tilanteeseen, jossa kuvia on rajallinen määrä mutta 
 
 ### Fine-tuned VGG16
 
-- Accuracy: 0.91
-- Ksusha: precision 0.89, recall 0.80
-- Tiku: precision 0.92, recall 0.96
+- Accuracy: 0.71 notebook-ajossa
+- Erillisessä aiemmassa arvioinnissa tallennetulla mallilla saavutettiin parempi tulos, mutta tuore notebook-uudelleenajo jäi selvästi alemmaksi.
 
-Fine-tuning antoi vahvan tuloksen ja tasapainoiset luokkakohtaiset metriikat. Tässä projektissa feature extraction oli kuitenkin testitarkkuuden perusteella hieman parempi.
+Fine-tuning ei tässä uudelleenajossa ollut paras ratkaisu. Pienessä datasetissä se voi helposti ylisovittua tai jäädä epävakaaksi, jos koulutusasetukset eivät osu hyvin kohdalleen.
 
 ### Confusion matrix
 
@@ -125,10 +123,10 @@ Oma CNN on hyvä oppimisen kannalta, koska sen rakenne on helppo ymmärtää ja 
 
 VGG16 feature extraction osoittautui tähän datasettiin erittäin sopivaksi. Malli hyödyntää ImageNetillä opittuja yleisiä piirteitä, kuten reunoja, tekstuureja ja muotoja, eikä yritä oppia koko kuvantunnistusta alusta asti pienestä datasta.
 
-Hienosäädetty VGG16 oli myös vahva, mutta pienessä datasetissä hienosäätö vaatii varovaisuutta. Jos vapautetaan liian monta kerrosta tai koulutetaan liian pitkään, malli voi alkaa ylisovittua.
+Hienosäädetty VGG16 vaatii pienessä datasetissä varovaisuutta. Jos vapautetaan liian monta kerrosta tai koulutetaan liian pitkään, malli voi alkaa ylisovittua tai antaa eri ajokerroilla vaihtelevia tuloksia.
 
 ## Johtopäätös
 
 Tehtävänannon näkökulmasta projekti täyttää edistyneen osan vaatimukset: data pipeline toimii, kolme mallityyppiä on toteutettu, tuloksia on visualisoitu ja malleja on verrattu testidatalla.
 
-Paras testitarkkuus saatiin VGG16 feature extraction -mallilla (`0.94`). Fine-tuned VGG16 oli myös erittäin hyvä (`0.91`) ja antoi tasapainoiset luokkakohtaiset tulokset. Käytännön suosituksena valitsisin tähän pieneen datasettiin VGG16 feature extraction -mallin, koska se oli tarkka ja todennäköisesti vähemmän altis ylisovittamiselle kuin hienosäädetty malli.
+Paras tai jaettu paras testitarkkuus saatiin VGG16 feature extraction -mallilla (`0.88`) ja augmentoidulla CNN-mallilla (`0.88`). Käytännön suosituksena valitsisin tähän pieneen datasettiin VGG16 feature extraction -mallin, koska se hyödyntää esikoulutettuja piirteitä ja on todennäköisesti vähemmän altis ylisovittamiselle kuin hienosäädetty malli.
