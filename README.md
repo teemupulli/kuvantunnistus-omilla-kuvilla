@@ -70,10 +70,10 @@ python src/train.py --mode finetune --raw_dir dataset/raw --data_dir dataset/spl
 Kun malli on koulutettu, testaa se seuraavasti:
 
 ```bash
-python src/evaluate.py --model src/vgg_finetune_best.h5 --output_prefix report/vgg_finetune_eval --image_size 224 --batch_size 16
+python src/evaluate.py --model src/vgg_finetune_best.h5 --test_dir dataset/split/test --output_prefix report/vgg_finetune_eval --image_size 224 --batch_size 16
 ```
 
-Voit tehdä saman myös muilla malleilla, esimerkiksi `src/aug_run_best.h5` tai `src/baseline_run_best.h5`.
+Voit tehdä saman myös muilla malleilla, esimerkiksi `src/aug_run_best.h5`, `src/baseline_run_best.h5` tai feature extraction -mallilla, jos olet tallentanut sen.
 
 ## Inference
 

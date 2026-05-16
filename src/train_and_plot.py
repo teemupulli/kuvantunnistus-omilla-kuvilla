@@ -7,12 +7,12 @@ from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
 
 from data_pipeline import create_generators
-from models import build_simple_cnn, build_fine_tuned_model
+from models import build_simple_cnn, build_feature_extraction_model, build_fine_tuned_model
 
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--mode', choices=['cnn', 'finetune'], default='cnn')
+    parser.add_argument('--mode', choices=['cnn', 'feature', 'finetune'], default='cnn')
     parser.add_argument('--data_dir', default=os.path.join('..', 'dataset', 'split'))
     parser.add_argument('--epochs', type=int, default=20)
     parser.add_argument('--batch_size', type=int, default=16)
@@ -76,6 +76,8 @@ def main():
 
     if args.mode == 'cnn':
         model = build_simple_cnn(input_shape=input_shape, num_classes=num_classes)
+    elif args.mode == 'feature':
+        model = build_feature_extraction_model(input_shape=input_shape, num_classes=num_classes)
     else:
         model = build_fine_tuned_model(input_shape=input_shape, num_classes=num_classes, unfrozen_layers=args.unfrozen_layers)
 

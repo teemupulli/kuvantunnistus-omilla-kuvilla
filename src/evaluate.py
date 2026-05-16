@@ -54,7 +54,7 @@ def save_confusion_matrix(cm, class_names, output_path):
 def main():
     parser = argparse.ArgumentParser(description="Evaluate a Keras image classifier on test data")
     parser.add_argument("--model", required=True, help="Path to saved Keras model file")
-    parser.add_argument("--test_dir", default="../dataset/split/test", help="Test data directory")
+    parser.add_argument("--test_dir", default="dataset/split/test", help="Test data directory")
     parser.add_argument("--batch_size", type=int, default=16, help="Batch size for evaluation")
     parser.add_argument("--image_size", type=int, default=224, help="Image width and height")
     parser.add_argument("--output_prefix", default="eval", help="Prefix for output files")
@@ -75,7 +75,9 @@ def main():
     report_text = classification_report(y_true, y_pred, target_names=class_names)
     cm = confusion_matrix(y_true, y_pred)
 
-    os.makedirs(os.path.dirname(args.output_prefix), exist_ok=True)
+    output_dir = os.path.dirname(args.output_prefix)
+    if output_dir:
+        os.makedirs(output_dir, exist_ok=True)
     report_json_path = f"{args.output_prefix}_classification_report.json"
     report_txt_path = f"{args.output_prefix}_classification_report.txt"
     cm_path = f"{args.output_prefix}_confusion_matrix.png"
