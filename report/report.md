@@ -39,10 +39,10 @@ Lisäksi omaa CNN-mallia testattiin augmentaatiolla, koska alkuperäinen CNN kä
 
 | Malli | Menetelmä | Test accuracy | Huomio |
 | --- | --- | ---: | --- |
-| Malli 1 | Oma CNN, notebook-ajossa | 0.74 | Oppi peruskuvion, mutta tulos jäi transfer learning -mallia heikommaksi. |
+| Malli 1 | Oma CNN, notebook-ajossa | 0.7353 | Oppi peruskuvion, mutta tulos jäi transfer learning -mallia heikommaksi. |
 | Malli 1b | Oma CNN + augmentaatio, erillinen ajettu arviointi | 0.88 | Paransi yleistymistä ja vähemmistöluokan tunnistusta. |
-| Malli 2 | VGG16 feature extraction, notebook-ajossa | 0.88 | Paras tai jaettu paras tulos; VGG16:n piirteet sopivat hyvin pieneen datasettiin. |
-| Malli 3 | Hienosäädetty VGG16, notebook-ajossa | 0.71 | Tässä uudelleenajossa ei parantanut tulosta, mikä viittaa ylisovittamisen tai epävakaan hienosäädön riskiin. |
+| Malli 2 | VGG16 feature extraction, notebook-ajossa | 0.8824 | Paras notebook-ajon tulos; VGG16:n piirteet sopivat hyvin pieneen datasettiin. |
+| Malli 3 | Hienosäädetty VGG16, notebook-ajossa | 0.7059 | Tässä uudelleenajossa ei parantanut tulosta, mikä viittaa ylisovittamisen tai epävakaan hienosäädön riskiin. |
 
 ### Tulosten vertailu
 
@@ -72,7 +72,7 @@ Testidatan arviointi paljasti mallien käytännön erot.
 
 ### Baseline CNN
 
-- Accuracy: 0.74 notebook-ajossa
+- Accuracy: 0.7353 notebook-ajossa
 - Aiemmassa erillisessä arvioinnissa accuracy oli 0.71, ja malli painottui vahvasti Tiku-luokkaan.
 
 Baseline-malli käytännössä painottui enemmistöluokkaan, joten sen accuracy näyttää paremmalta kuin todellinen luokkakohtainen suorituskyky.
@@ -87,7 +87,7 @@ Augmentaatio paransi erityisesti Ksusha-luokan tunnistusta ja vähensi mallin ri
 
 ### VGG16 Feature Extraction
 
-- Accuracy: 0.88 notebook-ajossa
+- Accuracy: 0.8824 notebook-ajossa
 - Mallissa VGG16:n konvoluutiokerrokset pidettiin jäädytettyinä.
 - Vain oma luokittelija koulutettiin omalle datasetille.
 
@@ -95,7 +95,7 @@ Tämä malli sopii hyvin tilanteeseen, jossa kuvia on rajallinen määrä mutta 
 
 ### Fine-tuned VGG16
 
-- Accuracy: 0.71 notebook-ajossa
+- Accuracy: 0.7059 notebook-ajossa
 - Erillisessä aiemmassa arvioinnissa tallennetulla mallilla saavutettiin parempi tulos, mutta tuore notebook-uudelleenajo jäi selvästi alemmaksi.
 
 Fine-tuning ei tässä uudelleenajossa ollut paras ratkaisu. Pienessä datasetissä se voi helposti ylisovittua tai jäädä epävakaaksi, jos koulutusasetukset eivät osu hyvin kohdalleen.
@@ -129,4 +129,4 @@ Hienosäädetty VGG16 vaatii pienessä datasetissä varovaisuutta. Jos vapauteta
 
 Tehtävänannon näkökulmasta projekti täyttää edistyneen osan vaatimukset: data pipeline toimii, kolme mallityyppiä on toteutettu, tuloksia on visualisoitu ja malleja on verrattu testidatalla.
 
-Paras tai jaettu paras testitarkkuus saatiin VGG16 feature extraction -mallilla (`0.88`) ja augmentoidulla CNN-mallilla (`0.88`). Käytännön suosituksena valitsisin tähän pieneen datasettiin VGG16 feature extraction -mallin, koska se hyödyntää esikoulutettuja piirteitä ja on todennäköisesti vähemmän altis ylisovittamiselle kuin hienosäädetty malli.
+Paras notebook-ajon testitarkkuus saatiin VGG16 feature extraction -mallilla (`0.8824`). Augmentoidun CNN-mallin erillinen arviointi oli lähes samalla tasolla (`0.88`). Käytännön suosituksena valitsisin tähän pieneen datasettiin VGG16 feature extraction -mallin, koska se hyödyntää esikoulutettuja piirteitä ja on todennäköisesti vähemmän altis ylisovittamiselle kuin hienosäädetty malli.
